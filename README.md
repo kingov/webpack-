@@ -62,19 +62,19 @@ package.json
 }
 ```
 由于*unix和windows设置NODE_ENV的语句有所差异，此处用到了一个库cross-env以达到兼容的目的
-```
+```javascript
 cnpm i -D cross-env
 ```
 ## 从dev环境写起
 新建一个src目录用户存放项目源文件，同时在src下新建一个index.js作为打包的入口
 webpack-dev-server
 安装webpack-dev-server
-```
+```javascript
     cnpm i -D webpack-dev-server
 ```
 配置webpack config
 webpack-config/dev.js
-```
+```javascript
     ...
     module.exports = webpackMerge(base, {
       entry: process.cwd() + '/src/index.js',
@@ -86,7 +86,7 @@ webpack-config/dev.js
 ```
 修改npm scripts
 package.json
-```
+```javascript
     {
      ...
      "scripts": {
@@ -99,12 +99,12 @@ package.json
 src目录下新建一个index.html作为template，htmlWebpackPlugins会根据这个template生成网站的index.html，同时自动写入bundle依赖。
 src下放一个favicon.ico作为网站的icon
 安装htmlWebpackPlugins
-```
+```javascript
     cnpm i -D html-webpack-plugin
 ```
  配置webpack config
     webpack-config/dev.js
-```
+```javascript
     ...
     const HtmlWebpackPlugin = require('html-webpack-plugin');
     ...
@@ -123,7 +123,7 @@ src下放一个favicon.ico作为网站的icon
 到这一步算是完成了最基本的开发环境配置，命令行执行npm run dev，然后浏览器打开localhost:8080就能看到成果
 将npm scripts中的start命令指向npm run dev，这样每次开始开发只需要执行npm start
 package.json
-```
+```javascript
 {
   ...
   "scripts": {
@@ -139,12 +139,12 @@ webpack本身只能处理js模块，如果需要处理其他类型的文件，�
 ES6+支持
 ES6+虽然不能直接被浏览器全部识别，但是能用babel转换成ES5代码。
     安装babel编译相关依赖
-```
+```javascript
     cnpm i -D babel-core babel-preset-latest babel-preset-stage-2 babel-runtime babel-plugin-transform-runtime babel-loader
 ```
    新建.babelrc文件并写入:
     .babelrc
-```
+```javascript
     {
       "presets": ["latest", "stage-2"],
       "plugins": ["transform-runtime"]
@@ -152,7 +152,7 @@ ES6+虽然不能直接被浏览器全部识别，但是能用babel转换成ES5�
 ```
    配置rules
     webpack-config/dev.js
-```
+```javascript
     module.exports = webpackMerge(base, {
       ...
       module: {
@@ -174,12 +174,12 @@ ES6+虽然不能直接被浏览器全部识别，但是能用babel转换成ES5�
 PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀等功能
 
 - 安装相关依赖
-```
+```javascript
     cnpm i -D style-loader css-loader postcss-loader autoprefixer node-sass sass-loader
 ```
 - 新建postcss.config.js
     postcss.config.js
-```
+```javascript
     module.exports = {
       plugins: [
         require('autoprefixer')({browsers: ['last 2 versions', 'iOS 7', 'Firefox > 20']})
@@ -188,7 +188,7 @@ PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀�
 ```
 - 配置rules
     webpack-config/dev.js
-```
+```javascript
     module.exports = webpackMerge(base, {
       ...
       module: {
@@ -222,12 +222,12 @@ PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀�
 ```
 ## html模板、图片等的处理
 - 安装相关依赖
-```
+```javascript
     cnpm i -D html-loader file-loader url-loader
 ```
 - 配置rules
     webpack-config/dev.js
-```
+```javascript
     module.exports = webpackMerge(base, {
       ...
       module: {
@@ -262,17 +262,17 @@ PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀�
 
 - entry可以共用，prod的output需要加上文件chunkhash用来刷新缓存,并将文件输出至dist目录
     webpack-config/dev.js
-```
+```javascript
     - entry: process.cwd() + '/src/index.js',
 ```
    webpack-config/base.js
-```
+```javascript
     module.exports = {
       entry: process.cwd() + '/src/index.js',
     };
 ```
   webpack-config/prod.js
-```
+```javascript
     const webpackMerge = require('webpack-merge');
     const base = require('./base');
     module.exports = webpackMerge(base, {
@@ -284,7 +284,7 @@ PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀�
 ```
 - HtmlWebpackPlugin公共
     webpack-config/dev.js
-```
+```javascript
     -new HtmlWebpackPlugin({
     -  filename: 'index.html',
     -  template: process.cwd() + '/src/index.html',
@@ -292,7 +292,7 @@ PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀�
     -})
 ```
   webpack-config/base.js
-```
+```javascript
     const HtmlWebpackPlugin = require('html-webpack-plugin');
     module.exports = {
       ...
@@ -307,7 +307,7 @@ PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀�
 ```
 - js、html和图片loader公共，prod的css loader需要使用ExtractTextPlugin将css从js中分离出来
     webpack-config/dev.js
-```
+```javascript
     -{
     -  test: /\.js$/,
     -  exclude: [/node_modules/],
@@ -333,7 +333,7 @@ PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀�
     -}
 ```
 webpack-config/base.js
-```
+```javascript
     ...
     module.exports = {
       ...
@@ -365,11 +365,11 @@ webpack-config/base.js
       }
     };
 ```
-```
+```javascript
 cnpm i -D extract-text-webpack-plugin@beta
 ```
 webpack-config/prod.js
-```
+```javascript
     ...
     const ExtractTextPlugin = require("extract-text-webpack-plugin");
     ...
@@ -403,11 +403,11 @@ webpack-config/prod.js
 ```
 ## production环境的其它处理
 - 使用UglifyJsPlugin压缩js
-```
+```javascript
 cnpm i - D uglifyjs-webpack-plugin
 ```
 webpack-config/prod.js
-```
+```javascript
 ...
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 ...
@@ -433,11 +433,11 @@ module.exports = webpackMerge(base, {
 ```
 ## 使用CleanWebpackPlugin清空output目录
 构建前先清空，防止出现垃圾文件
-```
+```javascript
 cnpm i -D clean-webpack-plugin
 ```
 webpack-config/prod.js
-```
+```javascript
 ...
 module.exports = webpackMerge(base, {
   ...
@@ -459,7 +459,7 @@ module.exports = webpackMerge(base, {
 ## 配置resolve.alias
 开发的时候如果有一个很深的目录比如：src/a/b/c/d/, 然后在d目录下的一个模块需要引入a目录下的模块，需要这样写：import '../../../some-module'，为了方便可以配置一个为src目录配置一个alias，这样模块引入只需要这样写：import src/a/some-module。
   webpack-config/base.js
-```
+```javascript
     ...
     const path = require('path');
     ...
@@ -477,13 +477,13 @@ module.exports = webpackMerge(base, {
 - 通常dev环境和production环境的配置参数比如api domain会有差异，所以需要利用alias将用户两个环境配置文件区分开来
     src目录下新建config目录，src/config目录下新增三个文件：base.js、dev.js、prod.js
     webpack-config/base.js
-```
+```javascript
     export default {
       version: '1.0.0'
     }
 ```
   webpack-config/dev.js
-```
+```javascript
     import base from './base'
     export default {
       ...base,
@@ -491,7 +491,7 @@ module.exports = webpackMerge(base, {
     }
 ```
   webpack-config/prod.js
-```
+```javascript
     import base from './base'
     export default {
       ...base,
@@ -501,7 +501,7 @@ module.exports = webpackMerge(base, {
 - 配置alias
     webpack-config/dev.js
 
-```
+```javascript
     ...
     const path = require('path');
     ...
@@ -517,7 +517,7 @@ module.exports = webpackMerge(base, {
     ...
 ```
    webpack-config/prod.js
-```
+```javascript
     ...
     const path = require('path');
     ...
