@@ -1,26 +1,19 @@
+## 项目初始结构分析
 
-
-##项目初始结构分析
-
-   通常项目会分成三个运行环境：开发人员在本地跑的开发环境(dev)、测试人员用来做黑盒测试的测试环境(test)和线上运行的生产环境(production)。
-    简单起见，本文只考虑开发环境(dev)和生产环境(prod)，测试环境可以自行类比。
-    综上，webpack的配置需要有两套，同时两套配置必然会存在相同的部分，故新建目录与文件如下图：
-![这里写图片描述](http://img.blog.csdn.net/20170816213431219?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQva2luZ292/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-    同时引入一个库webpack-merge用于合并base config和特定环境的config
-
-
+通常项目会分成三个运行环境：开发人员在本地跑的开发环境(dev)、测试人员用来做黑盒测试的测试环境(test)和线上运行的生产环境(production)。
+简单起见，本文只考虑开发环境(dev)和生产环境(prod)，测试环境可以自行类比。
+综上，webpack的配置需要有两套，同时两套配置必然会存在相同的部分，故新建目录与文件如下图：
+![](http://img.blog.csdn.net/20170816213431219?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQva2luZ292/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+同时引入一个库webpack-merge用于合并base config和特定环境的config
 ``` 
 cnpm i -D webpack-merge
 ```
-
-##开始写webpack config
-
+## 开始写webpack config
 webpack-config/base.js
 ```
 module.exports = {
   //common config
 };
-
 ```
 webpack-config/dev.js, webpack-config/prod.js
 ```
@@ -48,7 +41,7 @@ switch (ENV) {
 }
 module.exports = finalModule;
 ```
-##编写npm scripts，区分环境
+## 编写npm scripts，区分环境
 
 package.json
 ```
@@ -69,8 +62,7 @@ package.json
 ```
 cnpm i -D cross-env
 ```
-##从dev环境写起
-
+## 从dev环境写起
 新建一个src目录用户存放项目源文件，同时在src下新建一个index.js作为打包的入口
 webpack-dev-server
 安装webpack-dev-server
@@ -100,7 +92,7 @@ package.json
      }
     }
 ```
-##htmlWebpackPlugins
+## htmlWebpackPlugins
 src目录下新建一个index.html作为template，htmlWebpackPlugins会根据这个template生成网站的index.html，同时自动写入bundle依赖。
 src下放一个favicon.ico作为网站的icon
 安装htmlWebpackPlugins
@@ -139,7 +131,7 @@ package.json
   ...
 }
 ```
-##Loaders(Rules)
+## Loaders(Rules)
 webpack本身只能处理js模块，如果需要处理其他类型的文件，就需要Loaders进行转换
 ES6+支持
 ES6+虽然不能直接被浏览器全部识别，但是能用babel转换成ES5代码。
@@ -174,7 +166,7 @@ ES6+虽然不能直接被浏览器全部识别，但是能用babel转换成ES5�
       ...
     });
 ```
-##css处理
+## css处理
 现如今css预处理器已经成为前端开发的标配，Sass(Scss),Less和Stylus各行其道，个人偏好scss。
 PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀等功能
 
@@ -191,7 +183,7 @@ PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀�
       ]
     };
 ```
--  配置rules
+- 配置rules
     webpack-config/dev.js
 ```
     module.exports = webpackMerge(base, {
@@ -225,7 +217,7 @@ PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀�
       ...
     });
 ```
-##html模板、图片等的处理
+## html模板、图片等的处理
 - 安装相关依赖
 ```
     cnpm i -D html-loader file-loader url-loader
@@ -262,8 +254,8 @@ PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀�
     });
 ```
 至此，dev环境配置完成
-##配置production环境
-###抽出公共部分
+## 配置production环境
+### 抽出公共部分
 
 - entry可以共用，prod的output需要加上文件chunkhash用来刷新缓存,并将文件输出至dist目录
     webpack-config/dev.js
@@ -337,7 +329,7 @@ PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀�
     -  }
     -}
 ```
-   webpack-config/base.js
+webpack-config/base.js
 ```
     ...
     module.exports = {
@@ -373,7 +365,7 @@ PostCss可以作为一个后处理器，实现为css自动添加浏览器前缀�
 ```
 cnpm i -D extract-text-webpack-plugin@beta
 ```
-  webpack-config/prod.js
+webpack-config/prod.js
 ```
     ...
     const ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -436,8 +428,7 @@ module.exports = webpackMerge(base, {
 })
 ...
 ```
-##使用CleanWebpackPlugin清空output目录
-
+## 使用CleanWebpackPlugin清空output目录
 构建前先清空，防止出现垃圾文件
 ```
 cnpm i -D clean-webpack-plugin
@@ -462,9 +453,8 @@ module.exports = webpackMerge(base, {
 ...
 ```
 至此，production环境配置完毕，同时抽出了公共部分
-##配置resolve.alias
-
-  开发的时候如果有一个很深的目录比如：src/a/b/c/d/, 然后在d目录下的一个模块需要引入a目录下的模块，需要这样写：import '../../../some-module'，为了方便可以配置一个为src目录配置一个alias，这样模块引入只需要这样写：import src/a/some-module。
+## 配置resolve.alias
+开发的时候如果有一个很深的目录比如：src/a/b/c/d/, 然后在d目录下的一个模块需要引入a目录下的模块，需要这样写：import '../../../some-module'，为了方便可以配置一个为src目录配置一个alias，这样模块引入只需要这样写：import src/a/some-module。
   webpack-config/base.js
 ```
     ...
@@ -539,32 +529,5 @@ module.exports = webpackMerge(base, {
     })
     ...
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
