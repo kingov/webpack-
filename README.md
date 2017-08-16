@@ -532,5 +532,5 @@ module.exports = webpackMerge(base, {
     })
     ...
 ```
-如果本文对你有用的话，请点击一下右上角的Star  ^_^
+如果本文对你有用的话，不妨点击一下右上角的Star  ^_^
 
