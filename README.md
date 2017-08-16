@@ -3,7 +3,9 @@
 通常项目会分成三个运行环境：开发人员在本地跑的开发环境(dev)、测试人员用来做黑盒测试的测试环境(test)和线上运行的生产环境(production)。
 简单起见，本文只考虑开发环境(dev)和生产环境(prod)，测试环境可以自行类比。
 综上，webpack的配置需要有两套，同时两套配置必然会存在相同的部分，故新建目录与文件如下图：
+
 ![](http://img.blog.csdn.net/20170816213431219?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQva2luZ292/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
 同时引入一个库webpack-merge用于合并base config和特定环境的config
 ``` 
 cnpm i -D webpack-merge
