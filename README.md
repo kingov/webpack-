@@ -8,18 +8,18 @@
 ![](http://img.blog.csdn.net/20170816213431219?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQva2luZ292/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 同时引入一个库webpack-merge用于合并base config和特定环境的config
-``` 
+``` javascript
 cnpm i -D webpack-merge
 ```
 ## 开始写webpack config
 webpack-config/base.js
-```
+```javascript
 module.exports = {
   //common config
 };
 ```
 webpack-config/dev.js, webpack-config/prod.js
-```
+```javascript
 const webpackMerge = require('webpack-merge');
 const base = require('./base');
 module.exports = webpackMerge(base, {
@@ -27,7 +27,7 @@ module.exports = webpackMerge(base, {
 });
 ```
 webpack.config.js
-```
+```javascript
 const devModule = require('./webpack-config/dev');
 const prodModule = require('./webpack-config/prod');
 let finalModule = {};
@@ -47,7 +47,7 @@ module.exports = finalModule;
 ## 编写npm scripts，区分环境
 
 package.json
-```
+```javascript
 {
   "name": "webpack-demo",
   "version": "1.0.0",
